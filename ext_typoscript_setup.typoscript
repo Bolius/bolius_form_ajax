@@ -1,0 +1,3 @@
+module.tx_form.settings.yamlConfigurations {
+    1608040856 = EXT:bolius_form_ajax/Configuration/Form/FormEditorSetup.yaml
+}

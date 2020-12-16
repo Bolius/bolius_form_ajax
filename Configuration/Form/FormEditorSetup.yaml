@@ -1,0 +1,18 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formElementsDefinition:
+            Form:
+              formEditor:
+                predefinedDefaults:
+                  renderingOptions:
+                    ajaxSubmit: 'formEditor.elements.Form.editor.ajaxSubmit.value'
+                editors:
+                  500:
+                    identifier: 'ajaxSubmit'
+                    templateName: 'Inspector-CheckboxEditor'
+#                    label: 'formEditor.elements.Form.editor.submitButtonLabel.label'
+                    label: 'Some text'
+                    propertyPath: 'renderingOptions.ajaxSubmit'
