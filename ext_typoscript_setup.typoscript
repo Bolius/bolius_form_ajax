@@ -1,3 +1,31 @@
 module.tx_form.settings.yamlConfigurations {
+    1608040855 = EXT:bolius_form_ajax/Configuration/Form/Form.yaml
     1608040856 = EXT:bolius_form_ajax/Configuration/Form/FormEditorSetup.yaml
+}
+
+plugin.tx_form.settings.yamlConfigurations {
+    1608040855 = EXT:bolius_form_ajax/Configuration/Form/Form.yaml
+}
+
+page.includeCSS.boliusFormAjax = EXT:bolius_form_ajax/Resources/Public/Css/BoliusFormAjax.css
+
+# Page type for ajaxing only the selected form
+boliusFormAjax = PAGE
+boliusFormAjax {
+    typeNum = 1610006384
+
+    config {
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        no_cache = 1
+    }
+
+    10 = CONTENT
+    10 {
+        table = tt_content
+        select {
+            uidInList.data = GP:form_ce_uid
+        }
+    }
 }

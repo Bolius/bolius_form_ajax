@@ -1,0 +1,15 @@
+
+.loading-form {position: relative;}
+.loading-form > form {opacity: 0.5;}
+.loader {display: none;}
+.loading-form .loader {display: block;}
+
+.loader {
+    background-image: url(../Icons/oval.svg);
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    height: 40px;
+    width: 40px;
+}

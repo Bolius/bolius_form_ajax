@@ -1,0 +1,16 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formEditor:
+            translationFile:
+              10: 'EXT:form/Resources/Private/Language/Database.xlf'
+              100: 'EXT:bolius_form_ajax/Resources/Private/Language/Form/locallang.xlf'
+          formElementsDefinition:
+            Form:
+              renderingOptions:
+                templateRootPaths:
+                  100: 'EXT:bolius_form_ajax/Resources/Private/Frontend/Templates/'
+                layoutRootPaths:
+                  100: 'EXT:bolius_form_ajax/Resources/Private/Frontend/Layouts/'

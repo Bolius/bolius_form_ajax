@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+    <file source-language="en" datatype="plaintext">
+        <header/>
+        <body>
+            <trans-unit id="formEditor.editors.500.label" xml:space="preserve">
+                <source>Ajax: Step between form pages dynamically</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
