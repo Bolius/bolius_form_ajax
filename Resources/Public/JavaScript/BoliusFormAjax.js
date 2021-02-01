@@ -4,7 +4,11 @@
  * @return {{refresh: refresh}}
  * @constructor
  */
-const BoliusAjaxForm = function(formIdentifier){
+if (typeof BoliusAjaxForm === 'undefined'){
+    let BoliusAjaxForm;
+}
+
+BoliusAjaxForm = function(formIdentifier){
 
     if(typeof fetch !== 'function' || typeof FormData !== 'function') return;
 
@@ -20,6 +24,11 @@ const BoliusAjaxForm = function(formIdentifier){
     // Create a landing/target div for content coming in dynamically
     let form = formCE.querySelector('form');
     let temp = document.createElement('div'); // This should be a template
+
+    // All scripts on page that have src
+    let scriptSrcs = [...document.querySelectorAll('script[src]')].filter(function(s){
+        if(s.src !== 'undefined') return s.src;
+    });
 
     const _init = function(){
 
@@ -110,7 +119,6 @@ const BoliusAjaxForm = function(formIdentifier){
 
         // Build the fetch url
         let url = e.target.action.split('?');
-        // url.splice(1, 0, '?type=1000&'); // Add type 1000 to url. PAGE with typeNum=1000 required
         url.splice(1, 0, '?type=1610006384&'); // Add type 1000 to url. PAGE with typeNum=1000 required
 
         // Fetch
@@ -123,17 +131,64 @@ const BoliusAjaxForm = function(formIdentifier){
         })
         .then(html => {
 
+            // Parse html response
+            var parser = new DOMParser();
+            doc = parser.parseFromString(html, "text/html");
+
             // Stop loading animation
             formCE.classList.remove(loadingClass);
 
             // Put html response inside hidden temp element
-            temp.innerHTML = html;
+            temp.innerHTML = doc.body;
 
-            // Find the form part of the html
-            const tempForm = temp.querySelector('#' + form.id); // Dublicate id??!?!?
+            // Find scripts from doc head
+            let tempScripts = [...doc.querySelectorAll('script')];
 
-            // Put the form part inside the current form
-            form.innerHTML = tempForm.innerHTML;
+            tempSrcScripts = []; // Src scripts
+            tempInlineScripts = []; // Inline scripts (will be called when the last src script loads
+
+            tempScripts.forEach( function(script){
+                // Sort scripts into inline and external (src)
+                // Don't include scripts already loaded (see scriptSrcs)
+                if(script.src.length > 0 && !scriptSrcs.includes(script.src)){
+                    tempSrcScripts.push(script);
+                } else {
+                    tempInlineScripts.push(script);
+                }
+            });
+
+            form.innerHTML = doc.querySelector('#' + form.id).innerHTML;
+
+            function loadScript(sScriptSrc, loadedCallback) {
+                console.log('loading: ' + sScriptSrc);
+                var oHead = document.getElementsByTagName("HEAD")[0];
+                var oScript = document.createElement('script');
+                oScript.type = 'text/javascript';
+                oScript.src = sScriptSrc;
+                oHead.appendChild(oScript);
+                oScript.onload = loadedCallback;
+            }
+
+            // Load external scripts
+            if(tempSrcScripts.length > 0){
+                (function callLoadScript(i){
+                    loadScript(tempSrcScripts[i].src, function(){
+                        console.log('Finished loading: ' + tempSrcScripts[i].src);
+                        if((i + 1) < tempSrcScripts.length){
+                            callLoadScript(i + 1);
+                        } else {
+                            // If last, load inline scripts on load
+                            tempInlineScripts.forEach( function(script){
+                                console.log('Load inline script');
+                                const newScript = document.createElement('script');
+                                newScript.innerHTML = script.innerHTML;
+                                form.append(newScript);
+                                script.remove();
+                            });
+                        }
+                    });
+                })(0);
+            }
 
             _emitEvent(form);
 

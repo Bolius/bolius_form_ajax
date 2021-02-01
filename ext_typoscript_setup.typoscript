@@ -15,7 +15,7 @@ boliusFormAjax {
     typeNum = 1610006384
 
     config {
-        disableAllHeaderCode = 1
+        disableAllHeaderCode = 0
         xhtml_cleaning = 0
         admPanel = 0
         no_cache = 1
