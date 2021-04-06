@@ -24,8 +24,10 @@
 
 <v:asset.script	path="EXT:bolius_form_ajax/Resources/Public/JavaScript/BoliusFormAjax.js" />
 <v:asset.script standalone="1">
-	var cId = "{form.identifier}";
-	BoliusAjaxForm(cId);
+	<f:if condition="{form.renderingOptions.ajaxSubmit}">
+		var cId = "{form.identifier}";
+		BoliusAjaxForm(cId);
+	</f:if>
 </v:asset.script>
 
 </html>
