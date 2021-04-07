@@ -26,7 +26,11 @@
 <v:asset.script standalone="1">
 	<f:if condition="{form.renderingOptions.ajaxSubmit}">
 		var cId = "{form.identifier}";
-		BoliusAjaxForm(cId);
+		var boliusAjaxedForms = window.boliusAjaxedForms || [];
+		if(!boliusAjaxedForms.includes(cId)){
+			boliusAjaxedForms.push(cId);
+			BoliusAjaxForm(cId);
+		}
 	</f:if>
 </v:asset.script>
 

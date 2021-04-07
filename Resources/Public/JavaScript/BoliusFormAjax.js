@@ -1,7 +1,7 @@
 /**
  * Simple ajax submit
  * @param formIdentifier
- * @return {{refresh: refresh}}
+ * @return {}
  * @constructor
  */
 if (typeof BoliusAjaxForm === 'undefined'){
@@ -23,7 +23,7 @@ BoliusAjaxForm = function(formIdentifier){
 
     // Create a landing/target div for content coming in dynamically
     let form = formCE.querySelector('form');
-    let temp = document.createElement('div'); // This should be a template
+    let temp = document.createElement('template');
 
     // All scripts on page that have src
     let scriptSrcs = [...document.querySelectorAll('script[src]')].filter(function(s){
@@ -43,9 +43,10 @@ BoliusAjaxForm = function(formIdentifier){
         _disableBackBtn(form.querySelector('.previous'));
 
         form.addEventListener('submit', _hijaxFormSubmit);
+        // form.addEventListener('submit', _hijaxFormSubmit, {once: true});
     };
 
-    const refresh = function(){
+    const resetTempElement = function(){
         form = formCE.querySelector('form');
 
         _disableBackBtn(form.querySelector('.previous'));
@@ -79,12 +80,9 @@ BoliusAjaxForm = function(formIdentifier){
      * @private
      */
     const _emitEvent = function(form){
-        const event = new Event('reload');
-        console.log('Emitting an event', event);
-        form.addEventListener('reload', function (e) {
-            // debugger;
-            console.log(e);
-        }, false);
+        const event = new Event('boliusFormAjax_formRefreshed'); // TODO: Call this ajax-form or something else
+        // form.addEventListener('boliusFormAjax_formRefreshed', function (e) {
+        // }, { once: true, capture: false });
         form.dispatchEvent(event);
 
         // TODO: What element do we emit this event on?
@@ -149,10 +147,10 @@ BoliusAjaxForm = function(formIdentifier){
 
             tempScripts.forEach( function(script){
                 // Sort scripts into inline and external (src)
-                // Don't include scripts already loaded (see scriptSrcs)
+                // Don't include external scripts already loaded (see scriptSrcs)
                 if(script.src.length > 0 && !scriptSrcs.includes(script.src)){
                     tempSrcScripts.push(script);
-                } else {
+                } else if(script.src.length === 0) {
                     tempInlineScripts.push(script);
                 }
             });
@@ -193,7 +191,10 @@ BoliusAjaxForm = function(formIdentifier){
             _emitEvent(form);
 
             // Empty the temp element
-            refresh();
+            resetTempElement();
+
+            // Focus inside top input element
+            _focusInsideTopInputElement(form);
         }).catch( e => {
             // Log error in console
             console.log(e)
@@ -201,9 +202,15 @@ BoliusAjaxForm = function(formIdentifier){
 
     };
 
+    const _focusInsideTopInputElement = function(form){
+
+        const firstFormElm = form.querySelector('.form-control');
+        firstFormElm.focus();
+    }
+
     _init();
 
     return {
-        refresh
+
     };
 }
