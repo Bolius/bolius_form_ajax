@@ -76,18 +76,24 @@ BoliusAjaxForm = function(formIdentifier){
 
     /**
      * Emit an event for other scripts to use
-     * @param form
+     * @param eventName {String}
+     * @param eventDetail {Object}
      * @private
      */
-    const _emitEvent = function(form){
-        const event = new Event('boliusFormAjax_formRefreshed'); // TODO: Call this ajax-form or something else
-        // form.addEventListener('boliusFormAjax_formRefreshed', function (e) {
-        // }, { once: true, capture: false });
-        form.dispatchEvent(event);
+    const _emitEvent = function(eventName, eventDetail){
+        let event;
 
-        // TODO: What element do we emit this event on?
-        // Where do we grap the event?
-        // Should form utils be rewritten so it doesn't depend on url? (YES)
+        if(eventDetail){
+            event = new CustomEvent(eventName, {
+                detail: {
+                    eventDetail
+                }
+            });
+        } else {
+            event = new Event(eventName);
+        }
+
+        form.dispatchEvent(event);
     };
 
     /**
@@ -98,12 +104,19 @@ BoliusAjaxForm = function(formIdentifier){
     const _hijaxFormSubmit = function(e){
         const submitterBtn = e.submitter;
 
+        // Don't hijack the last step as it might need reloading for finishers
         if(submitterBtn &&
             submitterBtn.parentElement &&
-            submitterBtn.parentElement.classList.contains('submit')) return;
+            submitterBtn.parentElement.classList.contains('submit')) {
+
+            // Emit an event when finishing the form
+            _emitEvent('boliusFormAjax_formFinished');
+            return;
+        }
 
         e.preventDefault();
 
+        // Add loading class while getting new page and refreshing
         formCE.classList.add(loadingClass);
 
         const data = new FormData(this);
@@ -158,7 +171,7 @@ BoliusAjaxForm = function(formIdentifier){
             form.innerHTML = doc.querySelector('#' + form.id).innerHTML;
 
             function loadScript(sScriptSrc, loadedCallback) {
-                console.log('loading: ' + sScriptSrc);
+                // console.log('loading: ' + sScriptSrc);
                 var oHead = document.getElementsByTagName("HEAD")[0];
                 var oScript = document.createElement('script');
                 oScript.type = 'text/javascript';
@@ -171,13 +184,13 @@ BoliusAjaxForm = function(formIdentifier){
             if(tempSrcScripts.length > 0){
                 (function callLoadScript(i){
                     loadScript(tempSrcScripts[i].src, function(){
-                        console.log('Finished loading: ' + tempSrcScripts[i].src);
+                        // console.log('Finished loading: ' + tempSrcScripts[i].src);
                         if((i + 1) < tempSrcScripts.length){
                             callLoadScript(i + 1);
                         } else {
                             // If last, load inline scripts on load
                             tempInlineScripts.forEach( function(script){
-                                console.log('Load inline script');
+                                // console.log('Load inline script');
                                 const newScript = document.createElement('script');
                                 newScript.innerHTML = script.innerHTML;
                                 form.append(newScript);
@@ -188,7 +201,8 @@ BoliusAjaxForm = function(formIdentifier){
                 })(0);
             }
 
-            _emitEvent(form);
+            // Emit an event after loading form
+            _emitEvent('boliusFormAjax_formRefreshed', form);
 
             // Empty the temp element
             resetTempElement();
