@@ -207,6 +207,9 @@ BoliusAjaxForm = function(formIdentifier){
             // Empty the temp element
             resetTempElement();
 
+            // scroll into view
+            form.scrollIntoView(true);
+
             // Focus inside top input element
             _focusInsideTopInputElement(form);
         }).catch( e => {
