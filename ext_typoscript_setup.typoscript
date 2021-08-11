@@ -7,7 +7,7 @@ plugin.tx_form.settings.yamlConfigurations {
     1608040855 = EXT:bolius_form_ajax/Configuration/Form/Form.yaml
 }
 
-page.includeCSS.boliusFormAjax = EXT:bolius_form_ajax/Resources/Public/Css/BoliusFormAjax.css
+# page.includeCSS.boliusFormAjax = EXT:bolius_form_ajax/Resources/Public/Css/BoliusFormAjax.css
 
 # Page type for ajaxing only the selected form
 boliusFormAjax = PAGE
