@@ -19,7 +19,7 @@ BoliusAjaxForm = function(formIdentifier){
     const formCE = document.getElementById('c' + contentElementId);
     if(!formCE) return;
 
-    const loadingClass = 'loading-form';
+    const loadingClass = 'form-loading';
 
     // Create a landing/target div for content coming in dynamically
     let form = formCE.querySelector('form');
@@ -108,6 +108,9 @@ BoliusAjaxForm = function(formIdentifier){
         if(submitterBtn &&
             submitterBtn.parentElement &&
             submitterBtn.parentElement.classList.contains('submit')) {
+            // disable submit button
+            submitterBtn.classList.add('disabled');
+            formCE.classList.add(loadingClass);
 
             // Emit an event when finishing the form
             _emitEvent('boliusFormAjax_formFinished');
