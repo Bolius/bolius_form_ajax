@@ -1,23 +1,20 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = [
-    'title' => 'AJAX forms',
-    'description' => 'Submit forms from ext:form using AJAX',
-    'category' => 'frontend',
-    'author' => 'Bolius Digital',
+$EM_CONF['bolius_form_ajax'] = [
+    'title'        => 'AJAX forms',
+    'description'  => 'Submit forms from ext:form using AJAX',
+    'category'     => 'frontend',
+    'author'       => 'Bolius Digital',
     'author_email' => 'web@bolius.dk',
-    'state' => 'beta',
-    'uploadfolder' => 1,
-    'createDirs' => '',
-    'clearCacheOnLoad' => 0,
-    'version' => '1.0.0',
-    'constraints' => [
-        'depends' => [
-            'typo3' => '9.5.0-9.5.99',
-            'form' => '',
-            'vhs' => '5.2.0',
+    'state'        => 'beta',
+    'version'      => '1.0.0',
+    'constraints'  => [
+        'depends'   => [
+            'typo3' => '6.0.0-11.99.99',
+            'form'  => '',
+            'vhs'   => '5.2.0',
         ],
         'conflicts' => [],
-        'suggests' => [],
+        'suggests'  => [],
     ],
 ];
