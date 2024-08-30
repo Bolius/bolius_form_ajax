@@ -1,3 +1,6 @@
+## 1.0.0 (August 30, 2024)
+
+
 ## 0.1.0 (August 30, 2024)
   - Merge pull request #1 from Bolius/v11
   - Gitignore build folder
